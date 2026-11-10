@@ -10,34 +10,22 @@ Powered by a tuned **HistGradientBoosting** regression pipeline trained on ~74,0
 
 ```text
 airbnbpriceprediction/
-├── frontend/                              # Web Development Application
-│   ├── src/
-│   │   ├── components/                    # UI Components (Navbar, Footer, HouseIllustration, etc.)
-│   │   ├── context/                       # Global Prediction Context & State
-│   │   ├── data/                          # Dataset metadata & amenities list
-│   │   ├── pages/                         # React Pages (Home, Predict, Results, About, Performance)
-│   │   ├── services/                      # API client connecting frontend to backend
-│   │   └── types/                         # TypeScript interfaces (PredictionRequest, etc.)
-│   ├── index.html                         # HTML entry
-│   ├── package.json                       # Frontend dependencies & Vite scripts
-│   ├── tailwind.config.js                 # Tailwind styling configuration
-│   └── vite.config.ts                     # Vite config with /api reverse-proxy
-│
-├── backend/                               # Python Backend & Model Linking
-│   ├── server.py                          # Flask REST API (/api/predict, /api/model-performance, /api/health)
-│   ├── airbnb_features.py                 # Feature engineering pipeline & transformer classes
-│   ├── airbnb_price_prediction_model.pkl  # Trained ML pipeline (preprocessing + model)
-│   ├── model_metadata.json                # Model specifications, metrics, and categories
-│   ├── app.py                             # Interactive Streamlit dashboard
-│   └── requirements.txt                   # Backend Python dependencies
-│
+├── src/                                   # React web application source
+│   ├── components/                        # UI Components
+│   ├── context/                           # Global Prediction Context & State
+│   ├── data/                              # Dataset metadata & amenities list
+│   ├── pages/                             # React Pages
+│   ├── services/                          # API client
+│   └── types/                             # TypeScript interfaces
+├── index.html                             # HTML entry
+├── server.py                              # Flask REST API
+├── app.py                                 # Interactive Streamlit dashboard
 ├── main_prediction.ipynb                  # ⭐ PRIMARY JUPYTER NOTEBOOK (105 cells, complete pipeline)
 ├── airbnb_features.py                     # Root feature engineering reference
 ├── airbnb_price_prediction_model.pkl      # Root model artifact
 ├── model_metadata.json                    # Root metadata specification
-├── app.py                                 # Root Streamlit app reference
 ├── requirements.txt                       # Project Python dependencies
-├── package.json                           # Root workspace scripts
+├── package.json                           # Full-stack scripts and dependencies
 └── .gitignore                             # Git ignore rules
 ```
 
@@ -61,7 +49,7 @@ python -m venv .venv
 pip install -r requirements.txt
 
 # Start the Flask API server (runs on http://127.0.0.1:5000)
-python backend/server.py
+python server.py
 ```
 
 ### 2. Frontend Development Server
@@ -69,8 +57,7 @@ python backend/server.py
 In a second terminal, install dependencies and start the React application:
 
 ```bash
-# Navigate to frontend and install packages
-cd frontend
+# Install JavaScript dependencies from the repository root
 npm install
 
 # Start Vite dev server (runs on http://localhost:5173)
@@ -120,7 +107,7 @@ jupyter notebook main_prediction.ipynb
 An interactive Streamlit dashboard is also included:
 
 ```bash
-streamlit run backend/app.py
+streamlit run app.py
 ```
 
 ---
@@ -137,15 +124,15 @@ streamlit run backend/app.py
                  │  GET  /api/model-performance
                  ▼
 ┌─────────────────────────────────┐
-│   Flask REST API Backend        │  (backend/server.py on Port 5000)
+│   Flask REST API Backend        │  (server.py on Port 5000)
 │   - Request validation          │
 │   - Amenity vocabulary mapping  │
 └────────────────┬────────────────┘
                  │
                  ▼
 ┌─────────────────────────────────┐
-│   Trained ML Pipeline           │  (backend/airbnb_price_prediction_model.pkl)
-│   - ListingFeatureEngineer      │  (backend/airbnb_features.py)
+│   Trained ML Pipeline           │  (airbnb_price_prediction_model.pkl)
+│   - ListingFeatureEngineer      │  (airbnb_features.py)
 │   - ColumnTransformer           │
 │   - HistGradientBoosting        │
 └─────────────────────────────────┘

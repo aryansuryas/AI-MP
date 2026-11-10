@@ -1,6 +1,5 @@
 # Dependencies
 node_modules/
-frontend/node_modules/
 
 # Vercel
 .vercel/
@@ -8,9 +7,7 @@ frontend/node_modules/
 
 # Production build outputs
 dist/
-frontend/dist/
 dist-ssr/
-frontend/dist-ssr/
 
 # Python cache & virtual environments
 __pycache__/
@@ -45,4 +42,3 @@ pnpm-debug.log*
 .idea/
 .DS_Store
 Thumbs.db
-
