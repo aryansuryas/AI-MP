@@ -1,4 +1,4 @@
-# 🏠 StayWise AI — Smart Airbnb Pricing System
+# 🏠 StayWise AI — Smart Airbnb Pricing System [Dataset](https://www.kaggle.com/datasets/stevezhenghp/airbnb-price-prediction)
 
 An end-to-end Machine Learning web application that predicts the nightly rental price of Airbnb listings using location parameters, property characteristics, room capacity, and amenity extractions.
 
