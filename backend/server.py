@@ -29,15 +29,22 @@ from airbnb_features import predict_price
 app = Flask(__name__)
 CORS(app)  # Enable Cross-Origin Resource Sharing for the React frontend
 
-# Paths to artifacts
-MODEL_PATH = HERE / "airbnb_price_prediction_model.pkl"
-META_PATH = HERE / "model_metadata.json"
+# Paths to artifacts — search in backend/ first, then project root, then cwd
+def _find(filename: str) -> Path:
+    candidates = [
+        HERE / filename,                     # backend/<file>
+        HERE.parent / filename,              # project root/<file>
+        Path(os.getcwd()) / filename,        # cwd (Vercel sandbox root)
+        Path(os.getcwd()) / "backend" / filename,
+    ]
+    for p in candidates:
+        if p.exists():
+            return p
+    # Return backend path as default even if not found (error handled later)
+    return HERE / filename
 
-# Fallback to root directory if not found in backend/
-if not MODEL_PATH.exists() and (HERE.parent / "airbnb_price_prediction_model.pkl").exists():
-    MODEL_PATH = HERE.parent / "airbnb_price_prediction_model.pkl"
-if not META_PATH.exists() and (HERE.parent / "model_metadata.json").exists():
-    META_PATH = HERE.parent / "model_metadata.json"
+MODEL_PATH = _find("airbnb_price_prediction_model.pkl")
+META_PATH  = _find("model_metadata.json")
 
 MODEL = None
 METADATA = None

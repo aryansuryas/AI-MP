@@ -2,7 +2,7 @@
   "name": "staywise-ai",
   "version": "1.0.0",
   "private": true,
-  "description": "Smart Airbnb Pricing System - StayWise AI with ML Backend",
+  "description": "Smart Airbnb Pricing System — StayWise AI with ML Backend",
   "scripts": {
     "dev": "npm --prefix frontend run dev",
     "build": "npm --prefix frontend run build",
@@ -11,4 +11,3 @@
     "streamlit": "streamlit run backend/app.py"
   }
 }
-

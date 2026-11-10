@@ -1,0 +1,12 @@
+# Keep deployment fast — these are not needed in Vercel
+frontend/node_modules
+node_modules
+__pycache__
+backend/__pycache__
+api/__pycache__
+frontend/dist
+.git
+*.log
+.env.local
+main_prediction.ipynb
+app.py

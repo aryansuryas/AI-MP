@@ -2,6 +2,10 @@
 node_modules/
 frontend/node_modules/
 
+# Vercel
+.vercel/
+.env.local
+
 # Production build outputs
 dist/
 frontend/dist/
