@@ -1,7 +1,6 @@
 # Keep deployment fast — these are not needed in Vercel
 node_modules
 __pycache__
-api/__pycache__
 dist
 .git
 *.log
