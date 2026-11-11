@@ -18,12 +18,14 @@ airbnbpriceprediction/
 │   ├── services/                          # API client
 │   └── types/                             # TypeScript interfaces
 ├── index.html                             # HTML entry
-├── server.py                              # Flask REST API
 ├── app.py                                 # Interactive Streamlit dashboard
-├── main_prediction.ipynb                  # ⭐ PRIMARY JUPYTER NOTEBOOK (105 cells, complete pipeline)
+├── airbnb.ipynb                            # ⭐ PRIMARY JUPYTER NOTEBOOK (final pipeline)
 ├── airbnb_features.py                     # Root feature engineering reference
-├── airbnb_price_prediction_model.pkl      # Root model artifact
-├── model_metadata.json                    # Root metadata specification
+├── artifacts/                              # Generated model files used locally
+│   ├── airbnb_price_prediction_model.pkl
+│   └── model_metadata.json
+├── data/                                   # Optional local datasets (not committed)
+├── notebooks/archive/                      # Previous notebook versions
 ├── requirements.txt                       # Project Python dependencies
 ├── package.json                           # Full-stack scripts and dependencies
 └── .gitignore                             # Git ignore rules
@@ -48,8 +50,8 @@ python -m venv .venv
 # Install dependencies
 pip install -r requirements.txt
 
-# Start the Flask API server (runs on http://127.0.0.1:5000)
-python server.py
+# Start the local Streamlit app (runs on http://localhost:8501)
+streamlit run app.py
 ```
 
 ### 2. Frontend Development Server
@@ -70,7 +72,7 @@ npm run dev
 
 ## 📓 Machine Learning Notebook
 
-The primary ML notebook is **`main_prediction.ipynb`**. It contains the complete, executed 20-section workflow:
+The primary ML notebook is **`airbnb.ipynb`**. It contains the final training workflow:
 
 1. **Problem Framing & Setup**: Log-linear regression on `log_price` (`price = np.exp(pred)`).
 2. **Data Ingestion**: Kaggle dataset loading and schema validation (~74,000 listings).
@@ -83,11 +85,11 @@ The primary ML notebook is **`main_prediction.ipynb`**. It contains the complete
    - Ridge & Lasso regularized regressors
    - Random Forest Regressor
    - **HistGradientBoostingRegressor (Tuned)**: Best overall performer.
-6. **Artifact Export**: Saves `airbnb_price_prediction_model.pkl` and `model_metadata.json`.
+6. **Artifact Export**: Saves model files under `artifacts/`.
 
 To run or inspect the notebook:
 ```bash
-jupyter notebook main_prediction.ipynb
+jupyter notebook airbnb.ipynb
 ```
 
 ---
@@ -124,14 +126,14 @@ streamlit run app.py
                  │  GET  /api/model-performance
                  ▼
 ┌─────────────────────────────────┐
-│   Flask REST API Backend        │  (server.py on Port 5000)
-│   - Request validation          │
-│   - Amenity vocabulary mapping  │
+│   Streamlit Application         │  (app.py on Port 8501)
+│   - Listing input form          │
+│   - Model-backed price estimate │
 └────────────────┬────────────────┘
                  │
                  ▼
 ┌─────────────────────────────────┐
-│   Trained ML Pipeline           │  (airbnb_price_prediction_model.pkl)
+│   Trained ML Pipeline           │  (artifacts/airbnb_price_prediction_model.pkl)
 │   - ListingFeatureEngineer      │  (airbnb_features.py)
 │   - ColumnTransformer           │
 │   - HistGradientBoosting        │

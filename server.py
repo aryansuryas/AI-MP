@@ -2,7 +2,7 @@
 StayWise AI - Flask Prediction Backend API
 ------------------------------------------
 Connects the React web development frontend with the trained scikit-learn
-HistGradientBoosting regression model (from main_prediction.ipynb).
+HistGradientBoosting regression model (from airbnb.ipynb).
 
 Endpoints:
   POST /api/predict             -> Returns price estimate & low/high range
@@ -32,9 +32,10 @@ CORS(app)  # Enable Cross-Origin Resource Sharing for the React frontend
 # Paths to artifacts in the project root or current working directory
 def _find(filename: str) -> Path:
     candidates = [
+        HERE / "artifacts" / filename,
         HERE / filename,
-        HERE.parent / filename,
-        Path(os.getcwd()) / filename,        # cwd (Vercel sandbox root)
+        HERE.parent / "artifacts" / filename,
+        Path(os.getcwd()) / "artifacts" / filename,
     ]
     for p in candidates:
         if p.exists():
