@@ -124,7 +124,7 @@ export const HowItWorksPage: React.FC = () => {
             <span>Machine Learning Pipeline</span>
           </div>
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-[#171717]">
-            How StayWise AI Works
+            How StayWise Works
           </h1>
           <p className="text-xs sm:text-sm text-[#737373] mt-1 max-w-3xl">
             A step-by-step walkthrough of the data preparation, feature engineering, and scikit-learn regression pipeline powering every price estimation.

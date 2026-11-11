@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Home, Menu, X } from 'lucide-react';
+import { Menu, X } from 'lucide-react';
 
 export const Navbar: React.FC = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -29,15 +29,12 @@ export const Navbar: React.FC = () => {
             onClick={() => setMobileMenuOpen(false)}
             className="flex items-center space-x-2.5 text-[#171717] hover:opacity-85 transition-opacity flex-shrink-0"
           >
-            <div className="w-8 h-8 rounded-lg bg-[#333333] flex items-center justify-center text-white shadow-sm">
-              <Home className="w-4 h-4" />
+            <div className="w-8 h-8 rounded-lg bg-[#333333] flex items-center justify-center overflow-hidden shadow-sm">
+              <img src="/staywise-icon.png" alt="" className="w-full h-full object-cover" />
             </div>
             <div className="flex flex-col">
               <span className="font-semibold text-sm sm:text-base tracking-tight leading-none text-[#171717]">
-                StayWise AI
-              </span>
-              <span className="text-[9px] sm:text-[10px] text-[#737373] tracking-wide mt-0.5">
-                SMART AIRBNB PRICING
+                StayWise
               </span>
             </div>
           </Link>

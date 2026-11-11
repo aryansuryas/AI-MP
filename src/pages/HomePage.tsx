@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ArrowRight, CheckCircle2 } from 'lucide-react';
+import { ArrowRight } from 'lucide-react';
 import { HouseIllustration } from '../components/HouseIllustration';
 
 export const HomePage: React.FC = () => {
@@ -37,21 +37,6 @@ export const HomePage: React.FC = () => {
               </Link>
             </div>
 
-            {/* Verification points */}
-            <div className="pt-2 sm:pt-3 flex flex-wrap items-center gap-4 sm:gap-6 text-xs text-[#737373]">
-              <div className="flex items-center space-x-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#171717] flex-shrink-0" />
-                <span>6 Major US Markets</span>
-              </div>
-              <div className="flex items-center space-x-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#171717] flex-shrink-0" />
-                <span>13 Key Amenity Factors</span>
-              </div>
-              <div className="flex items-center space-x-1.5">
-                <CheckCircle2 className="w-3.5 h-3.5 text-[#171717] flex-shrink-0" />
-                <span>Log-Price Regression</span>
-              </div>
-            </div>
           </div>
 
           {/* Hero Right: Monochrome House Illustration */}
