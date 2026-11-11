@@ -1,8 +1,7 @@
 """
 Airbnb Price Prediction - optional Streamlit app.
 Run with:  streamlit run app.py
-Needs in the project: airbnb_features.py and artifacts/airbnb_price_prediction_model.pkl
-and artifacts/model_metadata.json.
+Needs in the SAME folder: airbnb_features.py, airbnb_price_prediction_model.pkl, model_metadata.json
 (all three are created by running the notebook).
 """
 import json
@@ -15,8 +14,7 @@ import streamlit as st
 from airbnb_features import predict_price, explain_prediction
 
 HERE = Path(__file__).parent
-ARTIFACTS = HERE / "artifacts"
-MODEL_FILE, META_FILE = ARTIFACTS / "airbnb_price_prediction_model.pkl", ARTIFACTS / "model_metadata.json"
+MODEL_FILE, META_FILE = HERE / "airbnb_price_prediction_model.pkl", HERE / "model_metadata.json"
 
 st.set_page_config(page_title="Airbnb Price Predictor", page_icon="🏠", layout="wide")
 st.title("🏠 Airbnb Nightly Price Predictor")
@@ -30,7 +28,7 @@ def load_artifacts():
 
 if not (MODEL_FILE.exists() and META_FILE.exists()):
     st.error("Model files not found. Run the notebook first (Section 17) so that "
-             "artifacts/airbnb_price_prediction_model.pkl and artifacts/model_metadata.json are created by the notebook.")
+             "airbnb_price_prediction_model.pkl and model_metadata.json are created next to app.py.")
     st.stop()
 
 model, meta = load_artifacts()

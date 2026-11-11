@@ -5,9 +5,5 @@ dist
 .git
 *.log
 .env.local
-airbnb.ipynb
-notebooks
-artifacts
+main_prediction.ipynb
 app.py
-server.py
-airbnb_features.py
