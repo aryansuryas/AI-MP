@@ -62,7 +62,7 @@ export const HowItWorksPage: React.FC = () => {
       subtitle: '80% Train, 20% Unseen Test Set',
       icon: Split,
       description:
-        'Splits data into 80% training data (where the linear weights are learned) and 20% test data (held-out listings never seen during training, serving as an unbiased final benchmark).',
+        'Splits data into 80% training data and 20% held-out listings for an unbiased final benchmark.',
       details: [
         'train_test_split(X, y, test_size=0.20, random_state=42)',
         'Unseen test evaluation simulates real host usage',
@@ -72,17 +72,17 @@ export const HowItWorksPage: React.FC = () => {
     },
     {
       step: '05',
-      title: 'Linear Regression Pipeline',
-      subtitle: 'ColumnTransformer & Imputation',
+      title: 'HistGradientBoosting Pipeline',
+      subtitle: 'ColumnTransformer & Feature Scaling',
       icon: Cpu,
       description:
-        'Chains scikit-learn preprocessing directly into LinearRegression(). Categorical variables (city, room_type, property_type) are one-hot encoded with handle_unknown="ignore". Missing numerical values are imputed via median strategy.',
+        'Chains scikit-learn preprocessing with HistGradientBoostingRegressor. Categorical variables are one-hot encoded, while numerical values are imputed and scaled.',
       details: [
         'ColumnTransformer handles mixed feature types',
         'OneHotEncoder for categorical features',
-        'Interpretable coefficients per feature weight',
+        'Tuned nonlinear estimator for feature interactions',
       ],
-      codeSnippet: 'preprocessor = ColumnTransformer([\n    ("cat", OneHotEncoder(handle_unknown="ignore"), CATEGORICAL_FEATURES),\n    ("num", SimpleImputer(strategy="median"), NUMERIC_FEATURES)\n])',
+      codeSnippet: 'model = Pipeline([\n    ("preprocessor", preprocessor),\n    ("regressor", HistGradientBoostingRegressor(...))\n])',
     },
     {
       step: '06',

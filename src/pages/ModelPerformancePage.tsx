@@ -51,7 +51,7 @@ export const ModelPerformancePage: React.FC = () => {
             Model Performance
           </h1>
           <p className="text-xs sm:text-sm text-[#737373] mt-1 max-w-3xl">
-            Empirical evaluation metrics and validation results for the Linear Regression pricing model.
+            Empirical evaluation metrics and validation results for the reviewed HistGradientBoosting pricing model.
           </p>
         </div>
 
@@ -65,11 +65,11 @@ export const ModelPerformancePage: React.FC = () => {
               <div className="flex flex-wrap items-center gap-2">
                 <span className="font-semibold text-[#171717]">Notebook Inspection Status</span>
                 <span className="inline-flex items-center px-2 py-0.5 rounded text-[10px] font-medium bg-[#FAFAFA] border border-[#E5E5E5] text-[#737373]">
-                  Airbnb_Price_Prediction.ipynb (Cells 14–33)
+                  main_prediction.ipynb (reviewed final notebook)
                 </span>
               </div>
               <p className="text-[#737373] leading-relaxed">
-                In the cloned repository, cells 14 through 33 define the scikit-learn evaluation pipeline (Linear Regression vs. Baseline Dummy Regressor) but do not have pre-saved output cells checked into git. Following strict data integrity guidelines, exact metrics are displayed as <span className="text-[#171717] font-medium">Pending Pipeline Execution</span> rather than invented numbers.
+                The reviewed notebook defines the preprocessing, tuning, and held-out evaluation pipeline. Metrics are shown when the local Flask API is running; the static Vercel site keeps its fallback status rather than inventing values.
               </p>
             </div>
           </div>
@@ -345,7 +345,7 @@ export const ModelPerformancePage: React.FC = () => {
               <div className="bg-[#FAFAFA] border border-[#E5E5E5] rounded-lg p-3">
                 <span className="font-semibold text-[#171717] block mb-1">Baseline Comparison</span>
                 <p>
-                  The Linear Regression pipeline beats the Dummy Regressor baseline by capturing geographical and amenity elasticity.
+                  The reviewed boosting pipeline captures nonlinear relationships across geographical, property, host, and amenity features.
                 </p>
               </div>
             </div>

@@ -18,29 +18,29 @@ export const AboutModelPage: React.FC = () => {
             <span>Model Architecture & Interpretability</span>
           </div>
           <h1 className="text-2xl sm:text-3xl md:text-4xl font-bold tracking-tight text-[#171717]">
-            About the Linear Regression Model
+            About the Reviewed HistGradientBoosting Model
           </h1>
           <p className="text-xs sm:text-sm text-[#737373] mt-1 max-w-3xl">
-            Why Linear Regression was chosen as the core estimator, how the mathematical log transformation works, and how feature weights translate into real rental dollar impacts.
+            How the reviewed HistGradientBoosting pipeline uses engineered listing features and log-price modeling to estimate nightly rental prices.
           </p>
         </div>
 
-        {/* SECTION 1: WHY LINEAR REGRESSION */}
+        {/* SECTION 1: WHY HISTGRADIENTBOOSTING */}
         <div className="bg-[#FFFFFF] border border-[#E5E5E5] rounded-xl p-5 sm:p-6 shadow-sm mb-6">
           <div className="flex items-center space-x-2 pb-3 mb-4 border-b border-[#F0F0F0]">
             <Compass className="w-4 h-4 text-[#171717]" />
             <h2 className="text-xs sm:text-sm font-semibold text-[#171717] uppercase tracking-wider">
-              1. The Choice of Linear Regression
+              1. The Reviewed Model Pipeline
             </h2>
           </div>
           <p className="text-xs sm:text-sm text-[#737373] leading-relaxed mb-4">
-            In Airbnb pricing, hosts require <strong className="text-[#171717]">explainability</strong>. A complex black-box model (such as a deep neural network) cannot easily explain to a host <em>why</em> their property was valued at a particular price. Linear Regression offers direct parameter interpretability: each learned weight corresponds directly to a quantifiable dollar percentage shift for an extra bedroom, an added bathroom, or a pool.
+            The reviewed notebook selects a tuned <strong className="text-[#171717]">HistGradientBoostingRegressor</strong> pipeline. It combines robust preprocessing with nonlinear feature interactions across property dimensions, location, host signals, and amenities.
           </p>
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3 sm:gap-4">
             <div className="bg-[#FAFAFA] border border-[#E5E5E5] rounded-lg p-4">
               <span className="font-semibold text-xs sm:text-sm text-[#171717] block mb-1">Interpretable Weights</span>
               <p className="text-[11px] sm:text-xs text-[#737373]">
-                Learns one weight per feature: log(price) = intercept + w₁·feature₁ + w₂·feature₂...
+                Learns nonlinear relationships across engineered listing features and log-price targets.
               </p>
             </div>
             <div className="bg-[#FAFAFA] border border-[#E5E5E5] rounded-lg p-4">
@@ -52,7 +52,7 @@ export const AboutModelPage: React.FC = () => {
             <div className="bg-[#FAFAFA] border border-[#E5E5E5] rounded-lg p-4 sm:col-span-2 lg:col-span-1">
               <span className="font-semibold text-xs sm:text-sm text-[#171717] block mb-1">Instant Inference</span>
               <p className="text-[11px] sm:text-xs text-[#737373]">
-                Matrix multiplication executes in sub-millisecond speeds, ideal for real-time web forms.
+                The serialized pipeline provides fast predictions for real-time web forms.
               </p>
             </div>
           </div>

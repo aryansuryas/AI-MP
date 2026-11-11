@@ -18,12 +18,12 @@ airbnbpriceprediction/
 │   ├── services/                          # API client
 │   └── types/                             # TypeScript interfaces
 ├── index.html                             # HTML entry
-├── server.py                              # Flask REST API
-├── app.py                                 # Interactive Streamlit dashboard
-├── main_prediction.ipynb                  # ⭐ PRIMARY JUPYTER NOTEBOOK (105 cells, complete pipeline)
-├── airbnb_features.py                     # Root feature engineering reference
-├── airbnb_price_prediction_model.pkl      # Root model artifact
-├── model_metadata.json                    # Root metadata specification
+├── server.py                              # Local Flask REST API
+├── app.py                                 # Local Streamlit dashboard
+├── main_prediction.ipynb                  # ⭐ Reviewed training notebook
+├── airbnb_features.py                     # Local model feature engineering
+├── airbnb_price_prediction_model.pkl      # Local model artifact
+├── model_metadata.json                    # Local model metadata
 ├── requirements.txt                       # Project Python dependencies
 ├── package.json                           # Full-stack scripts and dependencies
 └── .gitignore                             # Git ignore rules
@@ -70,7 +70,7 @@ npm run dev
 
 ## 📓 Machine Learning Notebook
 
-The primary ML notebook is **`main_prediction.ipynb`**. It contains the complete, executed 20-section workflow:
+The primary ML notebook is **`main_prediction.ipynb`**, the reviewed final workflow:
 
 1. **Problem Framing & Setup**: Log-linear regression on `log_price` (`price = np.exp(pred)`).
 2. **Data Ingestion**: Kaggle dataset loading and schema validation (~74,000 listings).
@@ -91,6 +91,19 @@ jupyter notebook main_prediction.ipynb
 ```
 
 ---
+
+## 🚀 Vercel Deployment
+
+Vercel deploys the React/Vite website as a static application. Python, notebook, model,
+and data files are excluded from the Vercel bundle to avoid serverless function size
+limits. The local Flask API remains available for development at `http://127.0.0.1:5000`.
+
+```bash
+npm install
+npm run build
+```
+
+Deploy the repository from Vercel with the project root as the deployment root.
 
 ## 📊 Model Performance
 

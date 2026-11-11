@@ -5,5 +5,9 @@ dist
 .git
 *.log
 .env.local
+*.py
+*.pkl
+*.ipynb
+requirements.txt
 main_prediction.ipynb
 app.py

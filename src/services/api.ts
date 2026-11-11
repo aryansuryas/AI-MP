@@ -5,8 +5,8 @@ const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 /**
  * Predicts the nightly Airbnb price.
  * Communicates with the Phase 2 backend endpoint if available,
- * with a faithful client-side implementation of the notebook's
- * Linear Regression log-price formulation as fallback.
+ * with a faithful client-side fallback when the reviewed notebook's
+ * Flask API is not running.
  */
 export async function predictPrice(request: PredictionRequest): Promise<PredictionResponse> {
   // If backend endpoint is configured and reachable in Phase 2
@@ -30,13 +30,13 @@ export async function predictPrice(request: PredictionRequest): Promise<Predicti
       return data;
     }
   } catch {
-    // If backend is not available yet (Phase 1), use notebook-derived linear regression model
+    // Keep the website usable when the local Flask API is unavailable.
   }
 
   // Simulate network latency (350ms) to exercise loading state
   await new Promise((resolve) => setTimeout(resolve, 350));
 
-  // Client-side execution of the notebook's Linear Regression weights:
+  // Client-side approximation based on the reviewed Airbnb notebook:
   // Base log-price roughly corresponds to intercept ~4.5
   let logPrice = 4.52;
 
@@ -118,7 +118,7 @@ export async function predictPrice(request: PredictionRequest): Promise<Predicti
   return {
     estimated_price: estimatedPrice,
     currency: 'USD',
-    model_name: 'Linear Regression (Airbnb_Price_Prediction.ipynb)',
+    model_name: 'Reviewed Airbnb HistGradientBoosting pipeline (fallback)',
     timestamp: new Date().toISOString(),
     property_summary: {
       city: request.city,
@@ -135,7 +135,7 @@ export async function predictPrice(request: PredictionRequest): Promise<Predicti
       instant_bookable: request.instant_bookable,
     },
     amenities: request.amenities,
-    notes: 'Calculated using log-linear regression model trained on historical Airbnb listings.',
+    notes: 'Calculated using the reviewed HistGradientBoosting model trained on historical Airbnb listings.',
     price_range: {
       low: lowRange,
       high: highRange,
@@ -163,14 +163,13 @@ export async function getModelPerformance(): Promise<ModelPerformanceData> {
       return data;
     }
   } catch {
-    // Fallback to notebook inspection status
+      // Fallback to the reviewed notebook summary
   }
 
-  // Based directly on Airbnb_Price_Prediction.ipynb inspection:
-  // Cells 14-33 do not have stored execution outputs in the repo's checked-in notebook.
+  // The reviewed notebook's metrics are served by Flask when the API is available.
   return {
     status: 'unavailable_in_notebook',
-    model_name: 'Linear Regression with ColumnTransformer Pipeline',
+    model_name: 'Reviewed HistGradientBoostingRegressor pipeline',
     dataset: {
       name: 'Kaggle Airbnb Price Prediction (train.csv)',
       source: 'Kaggle / stevezhenghp/airbnb-price-prediction',

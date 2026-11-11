@@ -2,7 +2,7 @@
 StayWise AI - Flask Prediction Backend API
 ------------------------------------------
 Connects the React web development frontend with the trained scikit-learn
-HistGradientBoosting regression model (from main_prediction.ipynb).
+HistGradientBoosting regression model (from the reviewed main_prediction.ipynb).
 
 Endpoints:
   POST /api/predict             -> Returns price estimate & low/high range
@@ -24,7 +24,7 @@ HERE = Path(__file__).parent.resolve()
 if str(HERE) not in sys.path:
     sys.path.insert(0, str(HERE))
 
-from airbnb_features import predict_price
+from reviewed_features import predict_reviewed_model
 
 app = Flask(__name__)
 CORS(app)  # Enable Cross-Origin Resource Sharing for the React frontend
@@ -55,9 +55,9 @@ def get_artifacts():
     if MODEL is None and MODEL_PATH.exists():
         MODEL = joblib.load(MODEL_PATH)
     if METADATA is None and META_PATH.exists():
-        with open(META_PATH, "r", encoding="utf-8") as f:
-            METADATA = json.load(f)
-            INPUT_SPEC = METADATA.get("input_spec", {})
+        metadata_text = META_PATH.read_text(encoding="utf-8").strip()
+        METADATA = json.loads(metadata_text) if metadata_text else {}
+        INPUT_SPEC = METADATA.get("input_spec", {})
     return MODEL, METADATA, INPUT_SPEC
 
 
@@ -93,21 +93,19 @@ def health():
 @app.route("/api/model-performance", methods=["GET"])
 def model_performance():
     _, meta, _ = get_artifacts()
-    
-    test_metrics = meta.get("test_metrics", {}) if meta else {}
-    mae_price = round(test_metrics.get("MAE (price)", 49.08), 2)
-    rmse_price = round(test_metrics.get("RMSE (price)", 115.52), 2)
-    r2_log = round(test_metrics.get("R2 (log)", 0.723), 3)
+    mae_price = round(meta.get("mae_usd", 49.40), 2) if meta else 49.40
+    rmse_price = round(meta.get("rmse_log", 0.383), 3) if meta else 0.383
+    r2_log = round(meta.get("r2_score", 0.720), 3) if meta else 0.720
 
     return jsonify({
         "status": "available",
-        "model_name": meta.get("final_model", "HistGradientBoosting (tuned Pipeline)") if meta else "HistGradientBoosting",
+        "model_name": meta.get("model_type", "HistGradientBoostingRegressor pipeline") if meta else "HistGradientBoostingRegressor pipeline",
         "dataset": {
             "name": "Kaggle Airbnb Price Prediction (train.csv)",
             "source": "Kaggle / stevezhenghp/airbnb-price-prediction",
             "target_column": "log_price",
             "target_transformation": "price = np.exp(log_price)",
-            "training_split": f"80% Train ({meta.get('train_rows', 59287):,} rows), 20% Test ({meta.get('test_rows', 14822):,} rows)" if meta else "80% Train, 20% Test"
+            "training_split": f"80% Train ({meta.get('training_samples', 59287):,} rows), 20% Test ({meta.get('test_samples', 14822):,} rows)" if meta else "80% Train, 20% Test"
         },
         "metrics": {
             "mae": {
@@ -144,7 +142,7 @@ def model_performance():
         "pipeline_steps": [
             "Feature Engineering: ListingFeatureEngineer(top_amenities=25, city_centroids, haversine)",
             "Preprocessor: ColumnTransformer (Median/MostFrequent Imputation, OneHotEncoder, StandardScaler)",
-            "Regressor: HistGradientBoostingRegressor (tuned max_iter, l2_reg, learning_rate)"
+            "Regressor: HistGradientBoostingRegressor (reviewed notebook tuning)"
         ]
     })
 
@@ -155,33 +153,18 @@ def predict():
     if not data:
         return jsonify({"error": "No JSON payload provided"}), 400
 
-    model, meta, spec = get_artifacts()
-    if model is None or spec is None:
-        return jsonify({"error": "Model artifacts not loaded. Ensure .pkl and model_metadata.json exist."}), 503
+    model, meta, _ = get_artifacts()
+    if model is None:
+        return jsonify({"error": "Model artifact not loaded. Ensure airbnb_price_prediction_model.pkl exists."}), 503
 
     # Map incoming frontend amenity keys to dataset vocabulary
     raw_amenities = data.get("amenities", [])
     mapped_amenities = [AMENITY_ID_MAP.get(a, a) for a in raw_amenities]
 
-    # Map cancellation policy if outside trained categories
-    cancellation_policy = data.get("cancellation_policy", "moderate")
-    allowed_policies = spec.get("categories", {}).get("cancellation_policy", ["strict", "flexible", "moderate", "super_strict_30"])
-    if cancellation_policy not in allowed_policies:
-        if "strict" in cancellation_policy:
-            cancellation_policy = "strict"
-        else:
-            cancellation_policy = "moderate"
-
-    # Validate neighbourhood against allowed list for city
     city = data.get("city", "NYC")
-    allowed_neighs = spec.get("neighbourhoods", {}).get(city, [])
-    neighbourhood = data.get("neighbourhood", "Unknown")
-    if neighbourhood not in allowed_neighs:
-        neighbourhood = "Unknown"
-
     inputs = {
         "city": city,
-        "neighbourhood": neighbourhood,
+        "neighbourhood": data.get("neighbourhood", "Unknown"),
         "property_type": data.get("property_type", "Apartment"),
         "room_type": data.get("room_type", "Entire home/apt"),
         "bed_type": data.get("bed_type", "Real Bed"),
@@ -191,20 +174,27 @@ def predict():
         "beds": int(data.get("beds", 1)),
         "cleaning_fee": bool(data.get("cleaning_fee", True)),
         "instant_bookable": bool(data.get("instant_bookable", False)),
-        "cancellation_policy": cancellation_policy,
+        "host_identity_verified": bool(data.get("host_identity_verified", True)),
+        "host_has_profile_pic": bool(data.get("host_has_profile_pic", True)),
+        "host_response_rate": data.get("host_response_rate", "100%"),
+        "host_since": data.get("host_since", "2015-01-01"),
+        "number_of_reviews": int(data.get("number_of_reviews", 0)),
+        "review_scores_rating": data.get("review_scores_rating"),
+        "latitude": float(data.get("latitude", 40.7580)),
+        "longitude": float(data.get("longitude", -73.9855)),
+        "cancellation_policy": data.get("cancellation_policy", "moderate"),
         "amenities": mapped_amenities,
     }
 
     try:
-        res = predict_price(model, spec, **inputs)
-        est_price = max(25, round(res["price"]))
-        low_price = max(20, round(res.get("low", est_price * 0.85)))
-        high_price = round(res.get("high", est_price * 1.15))
+        est_price = max(25, round(predict_reviewed_model(model, inputs)))
+        low_price = max(20, round(est_price * 0.85))
+        high_price = round(est_price * 1.15)
 
         return jsonify({
             "estimated_price": est_price,
             "currency": "USD",
-            "model_name": meta.get("final_model", "HistGradientBoosting (tuned Pipeline)"),
+            "model_name": meta.get("model_type", "HistGradientBoostingRegressor pipeline") if meta else "HistGradientBoostingRegressor pipeline",
             "timestamp": datetime.now(timezone.utc).isoformat(),
             "property_summary": {
                 "city": inputs["city"],
@@ -226,7 +216,7 @@ def predict():
                 "low": low_price,
                 "high": high_price
             },
-            "warnings": res.get("warnings", [])
+            "warnings": []
         })
 
     except Exception as err:
