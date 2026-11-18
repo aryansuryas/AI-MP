@@ -1,4 +1,4 @@
-# 🏠 StayWise AI — Smart Airbnb Pricing System [Dataset](https://www.kaggle.com/datasets/stevezhenghp/airbnb-price-prediction)
+# 🏠 StayWise AI — Smart Airbnb Pricing System [Datasets](https://www.kaggle.com/datasets/stevezhenghp/airbnb-price-prediction)
 
 An end-to-end Machine Learning web application that predicts the nightly rental price of Airbnb listings using location parameters, property characteristics, room capacity, and amenity extractions.
 
@@ -33,7 +33,7 @@ airbnbpriceprediction/
 
 ## ⚡ Quick Start
 
-### 1. Python Backend & Model Setup
+### 1. Python Backend & Model Setup.
 
 In a terminal, set up your Python environment and start the Flask API server:
 
